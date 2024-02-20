@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/dashboard', function () {
+    return 'hola';
+})->name('dashboard');
 
 
 // Routes for restaurant owners & operators
@@ -41,7 +44,6 @@ Route::get('/not-authorized', function () {
 
 
 // this route for non route
-Route::fallback(fn () => 'not found page');
 
 
 
@@ -51,6 +53,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::fallback(fn () => 'not found page');
 
 
 

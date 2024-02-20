@@ -60,8 +60,20 @@ class RegisteredUserController extends Controller
             $user->assignRole($operatorRole);
         }
 
+        //3- Assign  Resturant Owner Role if regetser as as resturant owner
+        if ($request->has('is_restaurant_owner')) {
+            $restaurantOwnerRole = Role::findByName('restaurant owner');
+            $user->assignRole($restaurantOwnerRole);
+        }
+
+        //3- Assign operator Role if regetser as as operator
+        if ($request->has('is_admin')) {
+            $operatorRole = Role::findByName('admin');
+            $user->assignRole($operatorRole);
+        }
+
         //4- Redirect path after registration : to edit it depand which role we create with it
-        $redirectPath = RouteServiceProvider::HOME; // by defualt sent us to home
+        $redirectPath = RouteServiceProvider::LOGIN; // by defualt sent us to home
 
         //5- if We create Account for operators
         if ($request->has('is_operator')) {
