@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\PlanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Restaurant\MenuController;
 use App\Http\Controllers\Restaurant\RestaurantController;
@@ -30,7 +31,8 @@ Route::middleware(['auth', 'verified', 'checkrole:restaurant owner|operator'])->
 // Routes for admins
 Route::middleware(['auth', 'verified', 'checkrole:admin'])->prefix('admin')->group(function () {
     Route::get('/', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-    // Other routes for admins...
+    Route::resource('plans', PlanController::class)->except(['show']);
+    Route::get('plans/{menu}', [PlanController::class, 'show'])->name('plans.show');
 });
 
 
