@@ -19,7 +19,7 @@ class CheckRoleMiddleware
 
 
 
-        // 1- check if user has one of those roles
+        // 1- check if user has one of passing roles let'
         foreach ($roles as $role) {
             if (Auth::user()->hasRole($role)) {
                 return $next($request);
