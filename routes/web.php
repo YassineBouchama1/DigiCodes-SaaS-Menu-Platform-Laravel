@@ -2,15 +2,22 @@
 
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\RestaurantOwner\RestaurantOwnerController;
+use App\Http\Controllers\Restaurant\MenuController;
+use App\Http\Controllers\Restaurant\RestaurantController;
+
 use Illuminate\Support\Facades\Route;
 
+
+Route::get('/', function () {
+    return view('welcome');
+});
 
 
 // Routes for restaurant owners & operators
 Route::middleware(['auth', 'verified', 'checkrole:restaurant owner|operator'])->prefix('restaurant')->group(function () {
-    Route::get('dashboard',  [RestaurantOwnerController::class, 'dashboard'])->name('restaurant.dashboard');
-    // Other routes for restaurant owners...
+    Route::get('/',  [RestaurantController::class, 'dashboard'])->name('restaurant.dashboard');
+    Route::resource('menus', MenuController::class)->except(['show']);
+    Route::get('menus/{menu}', [MenuController::class, 'show'])->name('menus.show');
 });
 
 
@@ -19,7 +26,7 @@ Route::middleware(['auth', 'verified', 'checkrole:restaurant owner|operator'])->
 
 // Routes for admins
 Route::middleware(['auth', 'verified', 'checkrole:admin'])->prefix('admin')->group(function () {
-    Route::get('dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     // Other routes for admins...
 });
 

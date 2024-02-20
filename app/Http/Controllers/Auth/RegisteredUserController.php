@@ -63,14 +63,14 @@ class RegisteredUserController extends Controller
         //4- Redirect path after registration : to edit it depand which role we create with it
         $redirectPath = RouteServiceProvider::HOME; // by defualt sent us to home
 
-        //5- if We Register Account for operators
+        //5- if We create Account for operators
         if ($request->has('is_operator')) {
 
-            $redirectPath = route('operator.index'); // send to Route list of operators
+            $redirectPath = route('operatores.index'); // send to Route list of operators
         }
 
         // if resturant owner register firt time send him to login page
-        $redirectPath = route('operator.login');
+        // $redirectPath = route('operator.login');
 
 
 
