@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class MenuItem extends Model
 {
@@ -16,8 +17,8 @@ class MenuItem extends Model
         return $this->belongsTo(Menu::class);
     }
 
-    public function media()
+    public function media(): MorphMany
     {
-        return $this->morphOne(Media::class, 'mediable');
+        return $this->morphMany(Media::class, 'mediable');
     }
 }
