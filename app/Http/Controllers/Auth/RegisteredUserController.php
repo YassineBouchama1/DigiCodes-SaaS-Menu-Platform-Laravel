@@ -69,6 +69,10 @@ class RegisteredUserController extends Controller
             $redirectPath = route('operator.index'); // send to Route list of operators
         }
 
+        // if resturant owner register firt time send him to login page
+        $redirectPath = route('operator.login');
+
+
 
         event(new Registered($user));
 
