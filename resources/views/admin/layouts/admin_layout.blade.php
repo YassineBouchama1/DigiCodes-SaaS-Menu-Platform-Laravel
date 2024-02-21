@@ -24,6 +24,7 @@
 
     <!-- Header Start -->
             @include('admin/layouts.Header')
+
                <!-- Header Start -->
 
                 <!--  start page content  -->
