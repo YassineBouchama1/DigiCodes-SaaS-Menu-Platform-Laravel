@@ -10,18 +10,33 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
-            @include('resturant/layouts.navBar')
+    <body class=" flex  flex-row w-full  bg-[#f0f5f9] text-base font-normal leading-5 font-sans">
+
             @include('resturant/layouts.sideBar')
-            <main>
+             <!--  inside page  -->
+  <div class="w-full mx-auto block lg:ml-[260px]  px-5  rounded-lg lg:px-0  box-border ">
+
+
+    <!-- Header Start -->
+            @include('resturant/layouts.Header')
+               <!-- Header Start -->
+
+                <!--  start page content  -->
+    <main class="rounded-[18px] h-full m-6 bg-[#f4f6f9]">
+
                 <!-- Content specific to each page will be injected here -->
                 @yield('content')
+
             </main>
+    <!--  end page content  -->
+
+
         </div>
+
     </body>
 </html>

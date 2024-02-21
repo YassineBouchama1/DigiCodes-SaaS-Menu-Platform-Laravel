@@ -17,3 +17,12 @@ database/seeders/RolesSeeder.php
     <!-- Examples: Show edit menu button -->
 @endcan
 
+
+
+
+copy this  to your page :
+@extends('resturant/layouts/resturant_layout')
+
+@section('content')
+  //here add your page body
+@endsection
