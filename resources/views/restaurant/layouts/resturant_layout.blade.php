@@ -16,8 +16,8 @@
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
-            @include('admin/layouts.navBar')
-
+            @include('resturant/layouts.navBar')
+            @include('resturant/layouts.sideBar')
             <main>
                 <!-- Content specific to each page will be injected here -->
                 @yield('content')
