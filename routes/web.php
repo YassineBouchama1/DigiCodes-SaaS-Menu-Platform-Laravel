@@ -5,7 +5,7 @@ use App\Http\Controllers\Admin\PlanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Restaurant\MenuController;
 use App\Http\Controllers\Restaurant\RestaurantController;
-
+use App\Http\Controllers\Restaurant\SubscriptionController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -22,6 +22,7 @@ Route::middleware(['auth', 'verified', 'checkrole:restaurant owner|operator'])->
     Route::get('/',  [RestaurantController::class, 'dashboard'])->name('restaurant.dashboard');
     Route::resource('menus', MenuController::class)->except(['show']);
     Route::get('menus/{menu}', [MenuController::class, 'show'])->name('menus.show');
+    Route::resource('subscriptions', SubscriptionController::class);
 });
 
 

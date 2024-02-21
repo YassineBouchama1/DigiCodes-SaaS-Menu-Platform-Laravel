@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('menu_id')->constrained('menus');
             $table->string('title');
+
             $table->text('description')->nullable();
             $table->decimal('price', 8, 2);
             $table->timestamps();

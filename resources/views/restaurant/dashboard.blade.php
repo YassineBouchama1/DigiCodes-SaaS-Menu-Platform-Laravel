@@ -1,4 +1,4 @@
-@extends('resturant/layouts/resturant_layout')
+@extends('restaurant/layouts/resturant_layout')
 
 @section('content')
     <!-- Your page-specific content goes here -->

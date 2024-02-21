@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Plan;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
@@ -70,6 +71,21 @@ class RegisteredUserController extends Controller
         if ($request->has('is_admin')) {
             $operatorRole = Role::findByName('admin');
             $user->assignRole($operatorRole);
+        }
+
+
+        //4- Automatically subscribe restaurant owners to the free plan
+        if ($request->has('is_restaurant_owner')) {
+            $freePlan = Plan::where('name', 'Free')->first();
+            if ($freePlan) {
+                $user->subscriptions()->create([
+                    'plan_id' => $freePlan->id,
+                    'start_date' => now(), // starting fron now
+                    //end from now plus furation days comes from plans 30days
+                    'end_date' => now()->addDays($freePlan->duration),
+                    'status' => 'active',
+                ]);
+            }
         }
 
         //4- Redirect path after registration : to edit it depand which role we create with it

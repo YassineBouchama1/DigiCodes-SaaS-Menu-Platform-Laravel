@@ -39,7 +39,7 @@
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
         {{-- this input determin wich role we want create user with --}}
-        <input type="checkbox" checked id="is_admin" name="is_admin">
+        <input type="checkbox" checked id="is_restaurant_owner" name="is_restaurant_owner">
         <div class="flex items-center justify-end mt-4">
             <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
                 {{ __('Already registered?') }}

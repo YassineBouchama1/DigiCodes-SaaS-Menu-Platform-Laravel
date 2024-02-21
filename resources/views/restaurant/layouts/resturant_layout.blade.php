@@ -17,13 +17,14 @@
     </head>
     <body class=" flex  flex-row w-full  bg-[#f0f5f9] text-base font-normal leading-5 font-sans">
 
-            @include('resturant/layouts.sideBar')
+            @include('restaurant/layouts.sideBar')
              <!--  inside page  -->
   <div class="w-full mx-auto block lg:ml-[260px]  px-5  rounded-lg lg:px-0  box-border ">
 
 
     <!-- Header Start -->
-            @include('resturant/layouts.Header')
+            @include('restaurant/layouts.header')
+
                <!-- Header Start -->
 
                 <!--  start page content  -->
