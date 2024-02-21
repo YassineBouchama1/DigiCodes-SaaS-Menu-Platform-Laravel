@@ -98,7 +98,7 @@ class PlanController extends Controller
         ]);
 
         // Redirect back to the index page with success message
-        return redirect()->route('admin.plans.index')->with('success', 'Plan updated successfully.');
+        return redirect()->route('plans.index')->with('success', 'Plan updated successfully.');
     }
 
 
@@ -109,6 +109,6 @@ class PlanController extends Controller
         $plan->delete();
 
         // Redirect back to the index page with success message
-        return redirect()->route('admin.plans.index')->with('success', 'Plan deleted successfully.');
+        return redirect()->route('plans.index')->with('success', 'Plan deleted successfully.');
     }
 }

@@ -1,4 +1,4 @@
-<header class="z-[995] sticky mainBg   px-5   min-h-[150px]  duration-300 ease-in-out flex  w-full box-border  items-center justify-between  top-0 right-0 color-opacity-87   shadow-md backdrop-blur-md">
+<header class="z-[995] sticky mainBg   px-5   min-h-[70px]  duration-300 ease-in-out flex  w-full box-border  items-center justify-between  top-0 right-0 color-opacity-87   shadow-md backdrop-blur-md">
 
 
 
