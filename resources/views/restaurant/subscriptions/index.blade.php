@@ -17,6 +17,14 @@
 @endif
 
 {{-- display msg if  successfylly --}}
+@if ($message = Session::get('error'))
+
+<div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
+    <span class="font-medium">Success alert!</span> {{$message}}
+  </div>
+@endif
+
+{{-- display msg if  successfylly --}}
 @if ($message = Session::get('success'))
 
 <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
@@ -35,65 +43,40 @@
 
             <hr class="mt-10" />
             <div class="flex space-x-10 pt-10 flex-col md:flex-row">
-            <div class="py-12">
-              <div class="bg-white pt-4 rounded-xl space-y-6 overflow-hidden  transition-all duration-500 transform hover:-translate-y-6 hover:scale-105 shadow-xl hover:shadow-2xl cursor-pointer">
-                <div class="px-8 flex justify-between items-center">
-                  <h4 class="text-xl font-bold text-gray-800">Hobby</h1>
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+
+
+                @foreach($plans as $plan)
+
+{{-- Start plan free --}}
+<form action="{{route('subscriptions.store')}}"  method="POST"
+class="py-12 {{$subscription->plan['name'] == $plan['name'] ? 'pointer-events-none opacity-55' :null}}" >
+@csrf()
+              <div class="bg-white hover:scale-105  pt-4 rounded-xl space-y-6 overflow-hidden  transition-all duration-500 transform hover:-translate-y-6 shadow-xl hover:shadow-2xl cursor-pointer">
+                  <div class="px-8 flex justify-between items-center">
+                      <h4 class="text-xl font-bold text-gray-800">{{$plan['name']}}</h1>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   </div>
-                  <h1 class="text-4xl text-center font-bold">$10.00</h1>
-                  <p class="px-4 text-center text-sm ">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem</p>
-                  <ul class="text-center">
-                    <li><a href="#" class="font-semibold">It is a long established</a></li>
-                    <li><a href="#" class="font-semibold">It is a long established</a></li>
-                    <li><a href="#" class="font-semibold">It is a long established</a></li>
+                  <h1 class="text-4xl text-center font-bold">{{$plan['price']}}$</h1>
+                  <p class="px-4 text-center text-sm ">{{$plan['description']}}</p>
+                  <ul class="text-center flex flex-col gap-3 w-full">
+                    <li class="flex gap-x-2 justify-center"><p class="font-semibold">Max menu items:</p><span>{{$plan['max_menu_items']}}</span></li>
+                    <li class="flex gap-x-2 justify-center"><p class="font-semibold">Max Media:</p><span>{{$plan['max_media']}}</span></li>
+                    <li class="flex gap-x-2 justify-center"><p class="font-semibold">Max Scans:</p><span>{{$plan['max_scans']}}</span></li>
                   </ul>
                   <div class="text-center bg-gray-200 ">
-                <button class="inline-block my-6 font-bold text-gray-800">Get started today</button>
+                    <input hidden value='{{$plan['id']}}' name="plan_id">
+                <button type="submit" class="inline-block my-6 font-bold text-gray-800">Get started today</button>
                   </div>
               </div>
-            </div>
-            <div class="py-12">
-              <div class="bg-white  pt-4 rounded-xl space-y-6 overflow-hidden transition-all duration-500 transform hover:-translate-y-6 -translate-y-2 scale-105 shadow-xl hover:shadow-2xl cursor-pointer">
-                <div class="px-8 flex justify-between items-center">
-                  <h4 class="text-xl font-bold text-gray-800">Professional</h1>
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                  </div>
-                  <h1 class="text-4xl text-center font-bold">$30.00</h1>
-                  <p class="px-4 text-center text-sm ">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem</p>
-                  <ul class="text-center">
-                    <li><a href="#" class="font-semibold">It is a long established</a></li>
-                    <li><a href="#" class="font-semibold">It is a long established</a></li>
-                    <li><a href="#" class="font-semibold">It is a long established</a></li>
-                  </ul>
-                  <div class="text-center mainBg ">
-                <button class="inline-block my-6 font-bold text-white">Get started today</button>
-                  </div>
-              </div>
-            </div>
-            <div class="py-12">
-              <div class="bg-white pt-4 rounded-xl space-y-6 overflow-hidden transition-all duration-500 transform hover:-translate-y-6 hover:scale-105 shadow-xl hover:shadow-2xl cursor-pointer">
-                <div class="px-8 flex justify-between items-center">
-                  <h4 class="text-xl font-bold text-gray-800">Business</h1>
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                  </div>
-                  <h1 class="text-4xl text-center font-bold">$45.00</h1>
-                  <p class="px-4 text-center text-sm ">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem</p>
-                  <ul class="text-center">
-                    <li><a href="#" class="font-semibold">It is a long established</a></li>
-                    <li><a href="#" class="font-semibold">It is a long established</a></li>
-                    <li><a href="#" class="font-semibold">It is a long established</a></li>
-                  </ul>
-                  <div class="text-center bg-gray-200 ">
-                <button class="inline-block my-6 font-bold text-gray-800">Get started today</button>
-                  </div>
-              </div>
-            </div>
+            </form>
+{{-- End plan free --}}
+                @endforeach
+
+
+
+
             </div>
           </div>
         </div>
