@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.mainBg{
+
+    background-color: #6777ef;
+
+  }
+  .mainTextColor{
+
+    color: #6777ef;
+
+  }
