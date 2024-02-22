@@ -19,7 +19,7 @@
 
 
 
-   <form action="{{route('operatores.store')}}"  method="POST"
+   <form "  method="POST"
    class="h-full w-full p-4 flex flex-col md:flex-row justify-between gap-4">
     @csrf()
     <div class="w-full p-4 bg-white rounded-sm transition-shadow box-border color-opacity-87   shadow-md backdrop-blur-md">
@@ -27,7 +27,7 @@
 <label for="name"
 class="flex flex-col gap-y-1 mt-8">
      Name
-    <input  type="text" id="name" name="name"
+    <input  type="text" id="name" name="name" value="{{$operatore['name']}}"
 class="rounded-sm border-md border-gray-200 forced-colors:text-blue-600"
     placeholder="Enter name">
 </label>
@@ -35,26 +35,20 @@ class="rounded-sm border-md border-gray-200 forced-colors:text-blue-600"
 <label for="email"
 class="flex flex-col gap-y-1 mt-8">
 email
-    <input  type="email" id="email" name="email"
+    <input  type="email" id="email" name="email" value="{{$operatore['email']}}"
 class="rounded-sm border-md border-gray-200 forced-colors:text-blue-600"
     placeholder="Enter email">
 </label>
 
 <label for="password"
 class="flex flex-col gap-y-1 mt-8">
-password
+new password
     <input  type="password" id="max_menu_items" name="password"
 class="rounded-sm border-md border-gray-200 forced-colors:text-blue-600"
-    placeholder="Enter password">
+    placeholder="Enter new password">
 </label>
 
-<label for="password_confirmation"
-class="flex flex-col gap-y-1 mt-8">
-Password Confirmation
-    <input  type="password" id="password_confirmation" name="password_confirmation"
-class="rounded-sm border-md border-gray-200 forced-colors:text-blue-600"
-    placeholder="Enter password confirmation">
-</label>
+
 
 <label for="password_confirmation"
 class="flex flex-col gap-y-1 mt-8">
@@ -62,8 +56,12 @@ Permissions
 
 
 @foreach($permissions as $permission)
+
 <div class="form-check  ">
-    <input class="form-check-input" type="checkbox" value="{{ $permission->name }}" id="permission_{{ $permission->name }}" name="permissions[]">
+    <input class="form-check-input" type="checkbox"
+    {{ $operatore->hasPermissionTo($permission->name) ? 'checked' : '' }}
+      value="{{ $permission->name }}" id="permission_{{ $permission->name }}"
+      name="permissions[]">
     <label class="form-check-label" for="permission_{{ $permission->name }}">
         {{ $permission->name }}
     </label>

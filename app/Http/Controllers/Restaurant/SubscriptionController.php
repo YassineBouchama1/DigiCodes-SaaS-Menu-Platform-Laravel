@@ -12,7 +12,8 @@ class SubscriptionController extends Controller
 {
     public function index()
     {
-        // Get the authenticated user's restaurant_id
+
+        //1-get id of resturant onwer who is auth
         $restaurantId = Auth::user()->restaurant_id;
 
         // 2-Fetch subscriptions for the authenticated user

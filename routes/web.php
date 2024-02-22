@@ -2,9 +2,9 @@
 
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\PlanController;
-use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Restaurant\MenuController;
+use App\Http\Controllers\Restaurant\OperatoreController;
 use App\Http\Controllers\Restaurant\RestaurantController;
 use App\Http\Controllers\Restaurant\SubscriptionController;
 use Illuminate\Support\Facades\Route;
@@ -24,7 +24,8 @@ Route::middleware(['auth', 'verified', 'checkrole:restaurant owner|operator'])->
     Route::resource('menus', MenuController::class)->except(['show']);
     Route::get('menus/{menu}', [MenuController::class, 'show'])->name('menus.show');
     Route::resource('subscriptions', SubscriptionController::class);
-    Route::post('operatores/register', [RegisteredUserController::class, 'store']);
+    Route::resource('operatores', OperatoreController::class)->except(['show']);
+    Route::get('operatores/{operatore}', [OperatoreController::class, 'show'])->name('operatores.show');
 });
 
 
@@ -35,7 +36,7 @@ Route::middleware(['auth', 'verified', 'checkrole:restaurant owner|operator'])->
 Route::middleware(['auth', 'verified', 'checkrole:admin'])->prefix('admin')->group(function () {
     Route::get('/', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::resource('plans', PlanController::class)->except(['show']);
-    Route::get('plans/{menu}', [PlanController::class, 'show'])->name('plans.show');
+    Route::get('plans/{plan}', [PlanController::class, 'show'])->name('plans.show');
 });
 
 
