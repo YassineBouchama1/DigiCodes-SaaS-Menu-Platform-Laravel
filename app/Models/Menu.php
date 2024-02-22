@@ -8,14 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Menu extends Model
 {
 
-    protected $fillable = ['user_id', 'title', 'description'];
+    protected $fillable = ['restaurant_id', 'title', 'description'];
 
     use HasFactory;
 
 
-    public function user()
+    public function restaurant()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Restaurant::class);
     }
 
     public function items()

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Plan;
+use App\Models\Restaurant;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
@@ -25,6 +26,7 @@ class RegisteredUserController extends Controller
         return view('auth.register');
     }
 
+
     /**
      * Handle an incoming registration request.
      *
@@ -36,49 +38,31 @@ class RegisteredUserController extends Controller
         //1- validation inputs
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'nameResturant' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
 
-        //2- create account
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
 
 
-        //3- Assign  Resturant Owner Role if regetser as as resturant owner
+        // if resgisterd as resturant owner
         if ($request->has('is_restaurant_owner')) {
-            $restaurantOwnerRole = Role::findByName('restaurant owner');
-            $user->assignRole($restaurantOwnerRole);
-        }
 
-        //3- Assign operator Role if regetser as as operator
-        if ($request->has('is_operator')) {
-            $operatorRole = Role::findByName('operator');
-            $user->assignRole($operatorRole);
-        }
+            // if register as resturant onwer valid if they enter name resturant
+            $request->validate([
+                'nameResturant' => ['required', 'string', 'max:255'],
+            ]);
 
-        //3- Assign  Resturant Owner Role if regetser as as resturant owner
-        if ($request->has('is_restaurant_owner')) {
-            $restaurantOwnerRole = Role::findByName('restaurant owner');
-            $user->assignRole($restaurantOwnerRole);
-        }
+            // create resturant
+            $resturantCreated =      Restaurant::create([
+                'name' => $request->nameResturant
+            ]);
 
-        //3- Assign operator Role if regetser as as operator
-        if ($request->has('is_admin')) {
-            $operatorRole = Role::findByName('admin');
-            $user->assignRole($operatorRole);
-        }
-
-
-        //4- Automatically subscribe restaurant owners to the free plan
-        if ($request->has('is_restaurant_owner')) {
+            // assign plan free atomaticly for resturant
             $freePlan = Plan::where('name', 'Free')->first();
             if ($freePlan) {
-                $user->subscriptions()->create([
+                $resturantCreated->subscriptions()->create([
                     'plan_id' => $freePlan->id,
                     'start_date' => now(), // starting fron now
                     //end from now plus furation days comes from plans 30days
@@ -86,19 +70,31 @@ class RegisteredUserController extends Controller
                     'status' => 'active',
                 ]);
             }
+
+            //create account for  resturnat
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'restaurant_id' => $resturantCreated->id
+            ]);
+
+            //assign resturant owner role
+            $restaurantOwnerRole = Role::findByName('restaurant owner');
+            $user->assignRole($restaurantOwnerRole);
         }
+
+
+
+
+
+
+
+
 
         //4- Redirect path after registration : to edit it depand which role we create with it
         $redirectPath = RouteServiceProvider::LOGIN; // by defualt sent us to home
 
-        //5- if We create Account for operators
-        if ($request->has('is_operator')) {
-
-            $redirectPath = route('operatores.index'); // send to Route list of operators
-        }
-
-        // if resturant owner register firt time send him to login page
-        // $redirectPath = route('operator.login');
 
 
 
@@ -107,10 +103,54 @@ class RegisteredUserController extends Controller
         // Auth::login($user);
 
         return redirect($redirectPath);
+    }
+
+
+
+    public function formAdmin(): View
+    {
+        return view('auth.createAdmin');
+    }
+
+    public function createAdmin(Request $request)
+    {
+
+
+        //1- fill data for admin
+     
+
+        //2- validation inputs
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ]);
 
 
 
 
-        // return redirect(RouteServiceProvider::HOME);
+        //3- create account
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+
+        //4- assign role and permissions
+        $operatorRole = Role::findByName('admin');
+        $user->assignRole($operatorRole);
+
+
+
+
+
+
+
+
+        event(new Registered($user));
+
+        // Auth::login($user);
+
+        return redirect()->route('admin.dashboard')->with('success', 'Admin account created successfully.');
     }
 }

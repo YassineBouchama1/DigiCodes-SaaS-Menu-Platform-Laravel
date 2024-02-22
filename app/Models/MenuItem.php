@@ -8,14 +8,14 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class MenuItem extends Model
 {
-    protected $fillable = ['menu_id', 'title', 'description', 'price', 'user_id'];
+    protected $fillable = ['menu_id', 'title', 'description', 'price', 'restaurant_id'];
 
     use HasFactory;
 
 
-    public function user()
+    public function restaurant()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Restaurant::class);
     }
     public function menu()
     {

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\PlanController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Restaurant\MenuController;
 use App\Http\Controllers\Restaurant\RestaurantController;
@@ -23,6 +24,7 @@ Route::middleware(['auth', 'verified', 'checkrole:restaurant owner|operator'])->
     Route::resource('menus', MenuController::class)->except(['show']);
     Route::get('menus/{menu}', [MenuController::class, 'show'])->name('menus.show');
     Route::resource('subscriptions', SubscriptionController::class);
+    Route::post('operatores/register', [RegisteredUserController::class, 'store']);
 });
 
 

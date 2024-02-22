@@ -12,11 +12,11 @@ class SubscriptionController extends Controller
 {
     public function index()
     {
-        //1-get id of resturant onwer who is auth
-        $userId = Auth::id();
+        // Get the authenticated user's restaurant_id
+        $restaurantId = Auth::user()->restaurant_id;
 
         // 2-Fetch subscriptions for the authenticated user
-        $subscription = Subscription::where('user_id', $userId)
+        $subscription = Subscription::where('restaurant_id', $restaurantId)
             ->where('status', 'active')
             ->first();
         $plans = Plan::all();
@@ -35,11 +35,11 @@ class SubscriptionController extends Controller
             'plan_id' => 'required|exists:plans,id',
         ]);
 
-        // Get the authenticated user's ID
-        $userId = Auth::id();
+        // Get the authenticated user's restaurant_id
+        $restaurantId = Auth::user()->restaurant_id;
 
-        //disable old subscribtion
-        Subscription::where('user_id', $userId)
+        // Disable old subscriptions for the restaurant
+        Subscription::where('restaurant_id', $restaurantId)
             ->where('status', 'active')
             ->update(['status' => 'disable']);
 
@@ -48,12 +48,11 @@ class SubscriptionController extends Controller
         $selectedPlan = Plan::find($request->plan_id);
 
         if ($selectedPlan) {
-            // Get the auth user ID
-            $userId = Auth::id();
+
 
 
             $requestData = array_merge($request->all(), [
-                'user_id' => $userId,
+                'restaurant_id' => $restaurantId,
                 'start_date' => now(), // starting from now
                 // end date is now plus plan duration
                 'end_date' => now()->addDays($selectedPlan->duration),

@@ -22,6 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'restaurant_id'
     ];
 
     /**
@@ -44,21 +45,11 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function menus()
-    {
-        return $this->hasMany(Menu::class);
-    }
-    public function items()
-    {
-        return $this->hasMany(MenuItem::class);
-    }
+
     public function restaurantInfo()
     {
-        return $this->hasOne(RestaurantInfo::class);
+        return $this->belongsTo(Restaurant::class);
     }
 
-    public function subscriptions()
-    {
-        return $this->hasMany(Subscription::class);
-    }
+
 }

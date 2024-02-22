@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
+            $table->foreignId('restaurant_id')->nullable()->constrained('restaurants')->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();
         });

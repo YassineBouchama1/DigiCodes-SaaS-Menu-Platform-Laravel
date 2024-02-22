@@ -3,7 +3,7 @@
 @section('content')
 {{-- display msg errors --}}
 
-@if ($errors->any())
+{{-- @if($errors->any())
 
 <ul>
     @foreach ($errors->all() as $error)
@@ -14,7 +14,7 @@
 
 </ul>
 
-@endif
+@endif --}}
 
 {{-- display msg if  successfylly --}}
 @if ($message = Session::get('success'))

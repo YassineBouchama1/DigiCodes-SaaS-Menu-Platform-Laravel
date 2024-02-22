@@ -14,11 +14,11 @@ class MenuController extends Controller
      */
     public function index()
     {
-        //1- Get the authenticated user ID
-        $userId = Auth::id();
+        // Get the authenticated user's restaurant_id
+        $restaurantId = Auth::user()->restaurant_id;
 
         //2- Fetch menus associated with the authenticated user
-        $menus = Menu::where('user_id', $userId)->get();
+        $menus = Menu::where('restaurant_id', $restaurantId)->get();
         // dd($menus);
         //3- send it to view
         return view('restaurant.menus.index', compact('menus'));
@@ -55,7 +55,9 @@ class MenuController extends Controller
     // Display the specified menu
     public function show(Menu $menu)
     {
-        if ($menu->user_id !== Auth::id()) {
+        // Get the authenticated user's restaurant_id
+        $restaurantId = Auth::user()->restaurant_id;
+        if ($menu->restaurant_id !== Auth::user()->restaurant_id) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -65,7 +67,7 @@ class MenuController extends Controller
     // Show the form for editing the specified menu
     public function edit(Menu $menu)
     {
-        if ($menu->user_id !== Auth::id()) {
+        if ($menu->restaurant_id !== Auth::user()->restaurant_id) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -77,7 +79,7 @@ class MenuController extends Controller
     // Update the specified menu in storage
     public function update(Request $request, Menu $menu)
     {
-        if ($menu->user_id !== Auth::id()) {
+        if ($menu->restaurant_id !== Auth::user()->restaurant_id) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -99,7 +101,7 @@ class MenuController extends Controller
     // Remove the specified menu from storage
     public function destroy(Menu $menu)
     {
-        if ($menu->user_id !== Auth::id()) {
+        if ($menu->restaurant_id !== Auth::user()->restaurant_id) {
             abort(403, 'Unauthorized action.');
         }
 

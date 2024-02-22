@@ -7,14 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Subscription extends Model
 {
-    protected $fillable = ['user_id', 'plan_id', 'start_date', 'end_date', 'status'];
+    protected $fillable = ['restaurant_id', 'plan_id', 'start_date', 'end_date', 'status'];
 
     use HasFactory;
 
 
-    public function user()
+    public function restaurant()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Restaurant::class);
     }
 
     public function plan()
