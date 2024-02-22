@@ -19,8 +19,10 @@ class OperatoreController extends Controller
     public function index()
     {
 
-        $operators = User::where('restaurant_id', Auth::user()->restaurant_id)->get();
-        // @dd($operators[0]->permissions);
+        $operators = User::where('restaurant_id', Auth::user()->restaurant_id)
+            ->where('id', '!=', Auth::user()->id)
+            ->get();
+
         return view('restaurant.operatores.index', compact('operators'));
     }
 
@@ -41,6 +43,7 @@ class OperatoreController extends Controller
     {
 
 
+
         // Validation inputs
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -57,11 +60,13 @@ class OperatoreController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'restaurant_id' => Auth::user()->restaurant_id,
         ]);
 
         // Assign role
         $operatorRole = Role::findByName('operator');
         $user->assignRole($operatorRole);
+
 
         if ($request->has('permissions')) {
             $permissions = $request->input('permissions');
@@ -89,6 +94,48 @@ class OperatoreController extends Controller
         // Return the view for editing a specific operatore
         return view('restaurant.operatores.edit', compact('operatore', 'permissions'));
     }
+
+
+    public function update(Request $request, User $operatore)
+    {
+        // Validation inputs
+        $request->validate([
+            'name' => ['nullable', 'string', 'max:255'],
+            'password' => ['nullable', 'confirmed', Rules\Password::defaults()],
+            'permissions' => ['array'],
+        ]);
+
+
+        // $operatore = User::findOrFail($id);
+
+        // Update name and password if provided
+        if ($request->filled('name')) {
+            $operatore->name = $request->name;
+        }
+
+        if ($request->filled('password')) {
+            $operatore->password = Hash::make($request->password);
+        }
+        $operatore->save();
+
+        // Revoke all existing permissions
+        // $operatore->revokeAllPermissions();
+
+        // Assign new permissions
+        if ($request->has('permissions')) {
+            $permissions = $request->input('permissions');
+            $operatore->syncPermissions($permissions);
+        } else {
+            $operatore->syncPermissions([]);
+        }
+
+        return   back()->with('success', 'Operator updated successfully.');
+    }
+
+
+
+
+
     public function destroy(User $operatore)
     {
         // Delete the operatore instance

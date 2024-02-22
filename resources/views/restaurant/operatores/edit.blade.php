@@ -17,11 +17,18 @@
 
 
 
+{{-- display msg if  successfylly --}}
+@if ($message = Session::get('success'))
 
+<div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
+    <span class="font-medium">Success alert!</span> {{$message}}
+  </div>
+@endif
 
-   <form "  method="POST"
+   <form   method="POST"  action="{{ route('operatores.update', ['operatore' => $operatore->id]) }}"
    class="h-full w-full p-4 flex flex-col md:flex-row justify-between gap-4">
-    @csrf()
+   @csrf
+   @method('put')
     <div class="w-full p-4 bg-white rounded-sm transition-shadow box-border color-opacity-87   shadow-md backdrop-blur-md">
 <h3 class="mb-4 text-3xl font-semibold text-gray-500">Create Operatore</h3>
 <label for="name"

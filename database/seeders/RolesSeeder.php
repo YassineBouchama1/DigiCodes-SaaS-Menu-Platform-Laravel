@@ -58,10 +58,10 @@ class RolesSeeder extends Seeder
 
         // Create operator role and assign permissions for managing menus
         $operatorRole = Role::create(['name' => 'operator']);
-        $operatorRole->syncPermissions([
-            'create menu',
-            'edit menu',
-            'delete menu'
-        ]);
+        // $operatorRole->syncPermissions([
+        //     'create menu',
+        //     'edit menu',
+        //     'delete menu'
+        // ]);
     }
 }
