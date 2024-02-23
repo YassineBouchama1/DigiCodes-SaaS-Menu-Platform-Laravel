@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\PlanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Restaurant\MenuController;
+use App\Http\Controllers\Restaurant\MenuItemController;
 use App\Http\Controllers\Restaurant\OperatoreController;
 use App\Http\Controllers\Restaurant\QrCodeGeneratorController;
 use App\Http\Controllers\Restaurant\RestaurantController;
@@ -32,22 +33,25 @@ Route::get('/dashboard', function () {
     }
 })->name('dashboard');
 
-Route::get('/send', function () {
-    Event::dispatch(new OperatorMail('operator@gmail.cm'));
-    return 'sent';
-});
+// Route::get('/send', function () {
+//     Event::dispatch(new OperatorMail('operator@gmail.cm'));
+//     return 'sent';
+// });
 
 // Routes for restaurant owners & operators
 Route::middleware(['auth', 'verified', 'checkrole:restaurant owner|operator'])->prefix('restaurant')->group(function () {
     Route::get('/',  [RestaurantController::class, 'dashboard'])->name('restaurant.dashboard');
     Route::resource('menus', MenuController::class)->except(['show']);
     Route::get('menus/{menu}', [MenuController::class, 'show'])->name('menus.show');
-    Route::resource('subscriptions', SubscriptionController::class);
     Route::resource('operatores', OperatoreController::class)->except(['show']);
+    Route::resource('subscriptions', SubscriptionController::class);
     Route::get('operatores/{operatore}', [OperatoreController::class, 'show'])->name('operatores.show');
     Route::post('/generate-qrcode', [QrCodeGeneratorController::class, 'generateWithColors'])->name('generate-qrcode');
 
     Route::get('qrcode', [QrCodeGeneratorController::class, 'generate'])->name('restaurant.qrcode');
+
+    Route::resource('menuitems', MenuItemController::class)->except(['show']);
+    Route::get('menuitems/{menu}', [MenuItemController::class, 'show'])->name('menuitems.show');
 });
 
 
