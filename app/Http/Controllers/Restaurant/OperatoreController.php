@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Restaurant;
 
+use App\Events\OperatorMail;
 use Illuminate\Auth\Events\Registered;
 
 use Illuminate\Validation\Rules;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Event;
 use Spatie\Permission\Models\Role;
 
 class OperatoreController extends Controller
@@ -129,6 +131,7 @@ class OperatoreController extends Controller
             $operatore->syncPermissions([]);
         }
 
+        Event::dispatch(new OperatorMail($operatore));
         return   back()->with('success', 'Operator updated successfully.');
     }
 

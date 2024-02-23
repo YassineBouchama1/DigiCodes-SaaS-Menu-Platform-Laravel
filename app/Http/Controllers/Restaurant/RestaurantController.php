@@ -15,4 +15,12 @@ class RestaurantController extends Controller
         // dd($permissions);
         return view('restaurant.dashboard');
     }
+
+    public function qrcode()
+    {
+        $user = Auth::user();
+        // $permissions =  $user->getAllPermissions();
+        // dd($permissions);
+        return view('restaurant.dashboard');
+    }
 }
