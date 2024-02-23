@@ -11,12 +11,14 @@ class MenuItemController extends Controller
 {
     public function index()
     {
+        // dd(MenuItem::find(1)->media);
+
         // Get the authenticated user's restaurant_id
         $restaurantId = Auth::user()->restaurant_id;
 
         //2- Fetch menus associated with the authenticated user
         $menuItems = MenuItem::where('restaurant_id', $restaurantId)->get();
-        // dd($menus);
+        // dd($menuItems[0]->media);
         //3- send it to view
         return view('restaurant.menuitems.index', compact('menuItems'));
     }
@@ -33,7 +35,7 @@ class MenuItemController extends Controller
     public function store(Request $request)
     {
 
-        dd(MenuItem::find(1)->get()->media);
+
         // dd($request->image);
         $request->validate([
             'title' => 'required|string|max:255',
@@ -41,12 +43,15 @@ class MenuItemController extends Controller
             'description' => 'required|max:255',
             'price' => 'required',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'video' => 'nullable|file'
         ]);
 
+        $image = $request->file('image');
+        $video = $request->file('video');
 
-        $imageName = time() . '.' . $request->image->extension();
+        // $imageName = time() . '.' . $request->image->extension();
 
-        $request->image->move(public_path('images'), $imageName);
+        // $request->image->move(public_path('images'), $imageName);
 
 
         $menu = new MenuItem();
@@ -56,7 +61,17 @@ class MenuItemController extends Controller
         $menu->price = $request->price;
         $menu->restaurant_id = Auth::user()->restaurant_id;
         $menu->save();
-        $menu->media()->create(['type' => 'image', 'url' => $imageName]);
+        if ($image) {
+            $imageName = time() . '.' . $image->extension();
+            $image->move(public_path('images'), $imageName);
+            $menu->media()->create(['type' => 'image', 'url' => $imageName]);
+        }
+
+        if ($video) {
+            $videoName = time() . '.' . $video->extension();
+            $video->move(public_path('videos'), $videoName);
+            $menu->media()->create(['type' => 'video', 'url' => $videoName]);
+        }
         return redirect()->route('menuitems.index')->with('success', 'Menu created successfully.');
     }
 
@@ -64,60 +79,79 @@ class MenuItemController extends Controller
 
 
     // Display the specified menu
-    public function show(MenuItem $menu)
+    public function show(MenuItem $menuitem)
     {
         // Get the authenticated user's restaurant_id
         $restaurantId = Auth::user()->restaurant_id;
-        if ($menu->restaurant_id !== Auth::user()->restaurant_id) {
+        if ($menuitem->restaurant_id !== Auth::user()->restaurant_id) {
             abort(403, 'Unauthorized action.');
         }
 
-        return view('restaurant.menuitems.show', compact('menu'));
+        return view('restaurant.menuitems.show', compact('menuitem'));
     }
 
     // Show the form for editing the specified menu
-    public function edit(MenuItem $menu)
+    public function edit(MenuItem $menuitem)
     {
-        if ($menu->restaurant_id !== Auth::user()->restaurant_id) {
+        if ($menuitem->restaurant_id !== Auth::user()->restaurant_id) {
             abort(403, 'Unauthorized action.');
         }
 
-        return view('menuitems.edit', compact('menu'));
+        return view('restaurant.menuitems.edit', compact('menuitem'));
     }
 
 
 
     // Update the specified menu in storage
-    public function update(Request $request, MenuItem $menu)
+    public function update(Request $request, MenuItem $menuitem)
     {
-        if ($menu->restaurant_id !== Auth::user()->restaurant_id) {
+        if ($menuitem->restaurant_id !== Auth::user()->restaurant_id) {
             abort(403, 'Unauthorized action.');
         }
 
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-        ]);
+        $menuitem->fill($request->only([
+            'title',
+            'menu_id',
+            'description',
+            'price',
+        ]));
 
-        $menu->title = $request->title;
-        $menu->description = $request->description;
-        $menu->save();
 
-        return redirect()->route('restaurant.menuitems.index')->with('success', 'Menu updated successfully.');
+        if ($request->hasFile('image')) {
+
+            $oldImage = $menuitem->media()->where('type', 'image')->first();
+            if ($oldImage) {
+                $oldImagePath = public_path('images/' . $oldImage->url);
+                if (file_exists($oldImagePath)) {
+                    unlink($oldImagePath);
+                }
+                $oldImage->delete();
+            }
+
+            // Upload new image
+            $imageName = time() . '.' . $request->file('image')->extension();
+            $request->image->move(public_path('images'), $imageName);
+
+            // Create new media record for the menu item
+            $menuitem->media()->create(['type' => 'image', 'url' => $imageName]);
+        }
+
+        $menuitem->save();
+        return redirect()->route('menuitems.index')->with('success', 'Menu updated successfully.');
     }
 
 
 
 
     // Remove the specified menu from storage
-    public function destroy(MenuItem $menu)
+    public function destroy(MenuItem $menuitem)
     {
-        if ($menu->restaurant_id !== Auth::user()->restaurant_id) {
+        if ($menuitem->restaurant_id !== Auth::user()->restaurant_id) {
             abort(403, 'Unauthorized action.');
         }
 
-        $menu->delete();
+        $menuitem->delete();
 
-        return redirect()->route('restaurant.menuitems.index')->with('success', 'Menu deleted successfully.');
+        return redirect()->route('menuitems.index')->with('success', 'Menu deleted successfully.');
     }
 }

@@ -2,7 +2,7 @@
 @section('content')
 {{-- display msg errors --}}
 
-{{-- @if($errors->any())
+@if($errors->any())
 
 <ul>
     @foreach ($errors->all() as $error)
@@ -10,10 +10,10 @@
         <li class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
             <span class="font-medium">Danger alert!</span> {{ $error }}
           </li>
-
+@endforeach
 </ul>
 
-@endif --}}
+@endif
 
 {{-- display msg if  successfylly --}}
 @if ($message = Session::get('success'))

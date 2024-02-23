@@ -51,7 +51,7 @@ Route::middleware(['auth', 'verified', 'checkrole:restaurant owner|operator'])->
     Route::get('qrcode', [QrCodeGeneratorController::class, 'generate'])->name('restaurant.qrcode');
 
     Route::resource('menuitems', MenuItemController::class)->except(['show']);
-    Route::get('menuitems/{menu}', [MenuItemController::class, 'show'])->name('menuitems.show');
+    Route::get('menuitems/{menuitem}', [MenuItemController::class, 'show'])->name('menuitems.show');
 });
 
 

@@ -19,15 +19,16 @@
 
 
 
-   <form action="{{route('menuitems.store')}}"  method="POST" enctype="multipart/form-data"
+   <form action="{{route('menuitems.update',['menuitem'=>$menuitem['id']]) }}"  method="POST" enctype="multipart/form-data"
    class="h-full w-full p-4 flex flex-col md:flex-row justify-between gap-4">
     @csrf()
+    @method('PUT')
     <div class="w-full p-4 bg-white rounded-sm transition-shadow box-border color-opacity-87   shadow-md backdrop-blur-md">
-<h3 class="mb-4 text-3xl font-semibold text-gray-500">Create Menu Items</h3>
+<h3 class="mb-4 text-3xl font-semibold text-gray-500">Update Menu Items</h3>
 <label for="Title"
 class="flex flex-col gap-y-1 mt-8">
      Title
-    <input  type="text" id="title" name="title"
+    <input  type="text" id="title" name="title" value="{{$menuitem['title']}}"
 class="rounded-sm border-md border-gray-200 forced-colors:text-blue-600"
     placeholder="Enter title">
 </label>
@@ -35,7 +36,7 @@ class="rounded-sm border-md border-gray-200 forced-colors:text-blue-600"
 <label for="price"
 class="flex flex-col gap-y-1 mt-8">
 price
-    <input  type="number" id="price" name="price"
+    <input  type="number" id="price" name="price" value="{{$menuitem['price']}}"
 class="rounded-sm border-md border-gray-200 forced-colors:text-blue-600"
     placeholder="Enter price">
 </label>
@@ -43,7 +44,7 @@ class="rounded-sm border-md border-gray-200 forced-colors:text-blue-600"
 <label for="description"
 class="flex flex-col gap-y-1 mt-8">
 description
-    <input  type="text" id="max_menu_items" name="description"
+    <input  type="text" id="max_menu_items" name="description" value="{{$menuitem['description']}}"
 class="rounded-sm border-md border-gray-200 forced-colors:text-blue-600"
     placeholder="Enter description">
 </label>
@@ -77,7 +78,6 @@ class="flex flex-col lg:flex-row gap-y-1 mt-8 ">
 <div class="p-4  bg-white rounded-sm transition-shadow box-border color-opacity-87   shadow-md backdrop-blur-md">
 
     <input name="image" type="file">
-    <input name="video" type="file">
         {{-- <div id="image-preview" class="max-w-sm p-6 mb-4 bg-gray-100 border-dashed border-2 border-gray-400 rounded-lg items-center mx-auto text-center cursor-pointer">
             <input id="image" name="image" type="file" class="" >
             <label for="image" class="cursor-pointer">
@@ -95,7 +95,7 @@ class="flex flex-col lg:flex-row gap-y-1 mt-8 ">
  </div>
 
  <div class="p-4 h-40 bg-white rounded-sm transition-shadow box-border color-opacity-87   shadow-md backdrop-blur-md">
-    <h4 class="mb-4 text-3xl font-semibold text-gray-500">Create</h4>
+    <h4 class="mb-4 text-3xl font-semibold text-gray-500">Update</h4>
     <hr>
 
     <button type="submit"
