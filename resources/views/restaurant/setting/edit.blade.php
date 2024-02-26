@@ -26,6 +26,9 @@
     <span class="font-medium">Success alert!</span> {{$message}}
   </div>
 @endif
+
+{{-- display custom  msg there is a  error --}}
+
 @if ($message = Session::get('error'))
 
 <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
