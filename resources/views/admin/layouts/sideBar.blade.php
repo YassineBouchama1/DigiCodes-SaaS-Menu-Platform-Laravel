@@ -31,6 +31,13 @@
       </li>
 
 
+      <li id="mainlink" class=" mt-1 cursor-pointer	 hover:text-[#0085DB] duration-300   no-underline   whitespace-nowrap   text-lg p-2 sm:p-3 sm:pl-6 rounded-tr-full rounded-br-full   font-normal leading-6">
+        <a href="{{route('users.index')}}">
+          <i class="ti ti-home h-[24px] w-[24px] "></i>
+          <span>Users</span>
+
+        </a>
+      </li>
 
 
     </ul>

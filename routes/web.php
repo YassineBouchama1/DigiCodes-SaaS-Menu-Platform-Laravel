@@ -3,6 +3,7 @@
 use App\Events\OperatorMail;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\PlanController;
+use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Restaurant\MenuController;
 use App\Http\Controllers\Restaurant\MenuItemController;
@@ -58,8 +59,8 @@ Route::middleware(['auth', 'verified', 'checkrole:restaurant owner|operator'])->
     Route::resource('menus', MenuController::class)->except(['show']);
     Route::get('menus/{menu}', [MenuController::class, 'show'])->name('menus.show');
     Route::resource('operatores', OperatoreController::class)->except(['show']);
-    Route::resource('subscriptions', SubscriptionController::class);
     Route::get('operatores/{operatore}', [OperatoreController::class, 'show'])->name('operatores.show');
+    Route::resource('subscriptions', SubscriptionController::class);
     Route::post('/generate-qrcode', [QrCodeGeneratorController::class, 'generateWithColors'])->name('generate-qrcode');
 
     Route::get('qrcode', [QrCodeGeneratorController::class, 'generate'])->name('restaurant.qrcode');
@@ -79,6 +80,9 @@ Route::middleware(['auth', 'verified', 'checkrole:admin'])->prefix('admin')->gro
     Route::get('/', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::resource('plans', PlanController::class)->except(['show']);
     Route::get('plans/{plan}', [PlanController::class, 'show'])->name('plans.show');
+
+    Route::resource('users', UsersController::class)->except(['show']);
+    Route::get('users/{user}', [UsersController::class, 'show'])->name('users.show');
 });
 
 
