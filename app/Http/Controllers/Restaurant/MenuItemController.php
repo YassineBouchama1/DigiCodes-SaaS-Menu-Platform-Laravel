@@ -140,7 +140,12 @@ class MenuItemController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        return view('restaurant.menuitems.edit', compact('menuitem'));
+        // Get the authenticated user's restaurant_id
+        $restaurantId = Auth::user()->restaurant_id;
+
+        //2- Fetch menus associated with the authenticated user
+        $menus = Menu::where('restaurant_id', $restaurantId)->get();
+        return view('restaurant.menuitems.edit', compact('menuitem', 'menus'));
     }
 
 
