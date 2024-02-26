@@ -56,7 +56,6 @@ class="rounded-sm border-md border-gray-200 forced-colors:text-blue-600"
 </label>
 
 
-
 <label for="password_confirmation"
 class="flex flex-col gap-y-1 mt-8">
 Permissions
