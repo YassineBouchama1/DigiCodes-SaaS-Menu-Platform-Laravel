@@ -34,34 +34,38 @@ class QrCodeGeneratorController extends Controller
         return view('restaurant.qrcode', ['qrCode' => $qrCode]);
     }
 
-    public function generateWithColors(Request $request)
-    {
-
-        $foregroundColor = $request->input('foregroundColor', '#000000'); // Default to black if not provided
-        $backgroundColor = $request->input('backgroundColor', '#ffffff'); // Default to white if not provided
 
 
-        $restaurant = Restaurant::where('id', auth()->user()->restaurant_id)->firstOrFail();
 
-        $qrCode = QrCode::size(500)->format('png')->color($foregroundColor, $backgroundColor)->generate(url('/' . $restaurant->name));
-
-        return response()->json(['qrCode' => $qrCode]);
-    }
-
-
-    public function redirect(Restaurant $restaurant)
+    public function redirect($restaurant)
 
     {
-        $statistics = Statistic::firstOrNew(['restaurant_id' => $restaurant->id]);
-        $limits = Subscription::where('restaurant_id', $restaurant->id)
+
+        //1- find resturnat by id
+        $restaurantData = Restaurant::where('id', $restaurant)->first();
+
+        //2- check iof there is a resturant with this id
+        if (!$restaurantData) {
+            return 'there is resturant with this link';
+        }
+        //3- bring all statics
+        $statistics = Statistic::where('restaurant_id', $restaurantData->id)->first();
+
+
+        //3- bring all Subscriptions
+        $limits = Subscription::where('restaurant_id', $restaurantData->id)
             ->where('status', 'active')
             ->first()->plan;
 
+        //4- chekc if they reahc limit for scan qrcode
         if ($statistics->count_scans >= $limits->max_scans) {
             return 'blocked';
         }
+
+        //5- incress statistics <count scan qrcode>
         $statistics->count_scans += 1;
+        $statistics->save();
         // dd($restaurant);
-        return Redirect::route('menu.index', ['restaurantName' => $restaurant->name]);
+        return Redirect::route('menu.index', ['restaurantName' => $restaurantData->name]);
     }
 }

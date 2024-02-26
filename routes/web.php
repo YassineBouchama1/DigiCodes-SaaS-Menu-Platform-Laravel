@@ -66,6 +66,8 @@ Route::middleware(['auth', 'verified', 'checkrole:restaurant owner|operator'])->
 
     Route::resource('menuitems', MenuItemController::class)->except(['show']);
     Route::get('menuitems/{menuitem}', [MenuItemController::class, 'show'])->name('menuitems.show');
+    Route::get('setting', [RestaurantController::class, 'edit'])->name('setting.edit');
+    Route::patch('setting/{restaurant}', [RestaurantController::class, 'update'])->name('setting.update');
 });
 
 

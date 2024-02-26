@@ -1,2 +1,2 @@
 
-<h2>{{$actor}} - {{$action}}</h2>
+<h2>{{$actor->email}} - {{$action}}</h2>
