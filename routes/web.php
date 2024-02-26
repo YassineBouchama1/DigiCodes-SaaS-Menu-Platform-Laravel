@@ -17,11 +17,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-
+//main redirect dashboard
 Route::get('/dashboard', function () {
     if (Auth::user()->hasRole('admin')) {
 
@@ -32,6 +28,28 @@ Route::get('/dashboard', function () {
         return redirect()->route('login');
     }
 })->name('dashboard');
+
+
+
+//home
+Route::get('/', function () {
+    return view('welcome');
+});
+
+
+//page display details about resturant
+Route::get('/menu/{restaurantName}', [RestaurantController::class, 'menuResturant'])->name('menu.index');
+
+
+
+
+
+
+
+
+// redirect qrcode
+Route::get('qrcode/{restaurant}', [QrCodeGeneratorController::class, 'redirect'])->name('qrcode');
+
 
 
 // Routes for restaurant owners & operators
