@@ -143,6 +143,7 @@ class OperatoreController extends Controller
     {
         // Delete the operatore instance
         $operatore->delete();
+        // Event::dispatch(new OperatorMail($operatore, 'Delete'));
 
         // Redirect back to the index page with success message
         return redirect()->route('operatores.index')->with('success', 'operatore deleted successfully.');

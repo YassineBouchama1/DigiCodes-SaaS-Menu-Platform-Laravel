@@ -33,10 +33,6 @@ Route::get('/dashboard', function () {
     }
 })->name('dashboard');
 
-// Route::get('/send', function () {
-//     Event::dispatch(new OperatorMail('operator@gmail.cm'));
-//     return 'sent';
-// });
 
 // Routes for restaurant owners & operators
 Route::middleware(['auth', 'verified', 'checkrole:restaurant owner|operator'])->prefix('restaurant')->group(function () {

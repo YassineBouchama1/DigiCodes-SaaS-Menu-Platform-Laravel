@@ -9,16 +9,16 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class MailableUpdateOperator extends Mailable
+class MailableWhatHappend extends Mailable
 {
     use Queueable, SerializesModels;
-    public $operator;
+
     /**
      * Create a new message instance.
      */
-    public function __construct($operator)
+    public function __construct()
     {
-        $this->operator = $operator;
+        //
     }
 
     /**
@@ -27,7 +27,7 @@ class MailableUpdateOperator extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Updated Your Profile ',
+            subject: 'Mailable What Happend',
         );
     }
 
@@ -37,7 +37,7 @@ class MailableUpdateOperator extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emailsTemplates.updateAccount',
+            view: 'view.name',
         );
     }
 

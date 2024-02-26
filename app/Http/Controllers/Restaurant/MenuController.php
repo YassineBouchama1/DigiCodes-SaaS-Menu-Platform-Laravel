@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Restaurant;
 
+use App\Events\RestaurantLogsEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Menu;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Event;
 
 class MenuController extends Controller
 {
@@ -38,11 +41,21 @@ class MenuController extends Controller
             'description' => 'nullable|string',
         ]);
 
+        $restaurantId = Auth::user()->restaurant_id;
         $menu = new Menu();
         $menu->title = $request->title;
         $menu->description = $request->description;
-        $menu->restaurant_id = Auth::user()->restaurant_id;
+        $menu->restaurant_id = $restaurantId;
         $menu->save();
+
+
+        //get owner of this resturnat
+        $ownerRestaurant = User::role('restaurant owner')
+            ->where('restaurant_id', $restaurantId)
+            ->first();
+        // dd($ownerRestaurant);
+        // send email to resturnat owner
+        Event::dispatch(new RestaurantLogsEvent(Auth::user(), 'create Category', $ownerRestaurant));
 
         return redirect()->route('menus.index')->with('success', 'Menu created successfully.');
     }
@@ -90,6 +103,14 @@ class MenuController extends Controller
     // Remove the specified menu from storage
     public function destroy(Menu $menu)
     {
+        //get owner of this resturnat
+        $ownerRestaurant = User::role('restaurant owner')
+            ->where('restaurant_id', $menu->restaurant_id)
+            ->first();
+        // dd($ownerRestaurant);
+        // send email to resturnat owner
+        Event::dispatch(new RestaurantLogsEvent(Auth::user(), 'Deleted Category', $ownerRestaurant));
+
         if ($menu->restaurant_id !== Auth::user()->restaurant_id) {
             abort(403, 'Unauthorized action.');
         }

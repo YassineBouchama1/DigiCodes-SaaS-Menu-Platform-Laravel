@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Restaurant;
 
+use App\Events\RestaurantLogsEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Menu;
 use App\Models\MenuItem;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Event;
 
 class MenuItemController extends Controller
 {
@@ -78,6 +81,15 @@ class MenuItemController extends Controller
             $video->move(public_path('videos'), $videoName);
             $menu->media()->create(['type' => 'video', 'url' => $videoName]);
         }
+
+        //get owner of this resturnat
+        $ownerRestaurant = User::role('restaurant owner')
+            ->where('restaurant_id', $menu->restaurant_id)
+            ->first();
+        // dd($ownerRestaurant);
+        // send email to resturnat owner
+        Event::dispatch(new RestaurantLogsEvent(Auth::user(), 'create Menu Item', $ownerRestaurant));
+
         return redirect()->route('menuitems.index')->with('success', 'Menu created successfully.');
     }
 
@@ -143,6 +155,14 @@ class MenuItemController extends Controller
         }
 
         $menuitem->save();
+        //get owner of this resturnat
+        $ownerRestaurant = User::role('restaurant owner')
+            ->where('restaurant_id', $menuitem->restaurant_id)
+            ->first();
+        // dd($ownerRestaurant);
+        // send email to resturnat owner
+        Event::dispatch(new RestaurantLogsEvent(Auth::user(), 'Update Menu Item', $ownerRestaurant));
+
         return redirect()->route('menuitems.index')->with('success', 'Menu updated successfully.');
     }
 
@@ -155,8 +175,15 @@ class MenuItemController extends Controller
         if ($menuitem->restaurant_id !== Auth::user()->restaurant_id) {
             abort(403, 'Unauthorized action.');
         }
-
+        $restaurant_id = $menuitem->restaurant_id;
         $menuitem->delete();
+        //get owner of this resturnat
+        $ownerRestaurant = User::role('restaurant owner')
+            ->where('restaurant_id', $restaurant_id)
+            ->first();
+        // dd($ownerRestaurant);
+        // send email to resturnat owner
+        Event::dispatch(new RestaurantLogsEvent(Auth::user(), 'Deleted Category', $ownerRestaurant));
 
         return redirect()->route('menuitems.index')->with('success', 'Menu deleted successfully.');
     }

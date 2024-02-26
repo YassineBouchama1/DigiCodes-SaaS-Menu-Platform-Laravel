@@ -9,16 +9,19 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class MailableUpdateOperator extends Mailable
+class MailableRestaurantLogs extends Mailable
 {
     use Queueable, SerializesModels;
-    public $operator;
-    /**
-     * Create a new message instance.
-     */
-    public function __construct($operator)
+
+    public $actor;
+    public $action;
+    public $ownerResturant;
+
+    public function __construct($event)
     {
-        $this->operator = $operator;
+        $this->actor = $event->actor;
+        $this->action = $event->action;
+        $this->ownerResturant = $event->ownerResturant;
     }
 
     /**
@@ -27,7 +30,7 @@ class MailableUpdateOperator extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Updated Your Profile ',
+            subject: 'Restaurant Logs |' . $this->action,
         );
     }
 
@@ -37,7 +40,7 @@ class MailableUpdateOperator extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emailsTemplates.updateAccount',
+            view: 'emailsTemplates.RestaurantLogs',
         );
     }
 

@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Events\OperatorMail;
+use App\Events\RestaurantLogsEvent;
+use App\Listeners\RestaurantLogsListener;
 use App\Listeners\SendOperatoMail;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -22,7 +24,11 @@ class EventServiceProvider extends ServiceProvider
         ],
         OperatorMail::class => [
             SendOperatoMail::class
+        ],
+        RestaurantLogsEvent::class => [
+            RestaurantLogsListener::class,
         ]
+
     ];
 
     /**
