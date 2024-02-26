@@ -27,4 +27,8 @@ class Restaurant extends Model
     {
         return $this->hasMany(User::class);
     }
+    public function statistic()
+    {
+        return $this->hasOne(Restaurant::class);
+    }
 }

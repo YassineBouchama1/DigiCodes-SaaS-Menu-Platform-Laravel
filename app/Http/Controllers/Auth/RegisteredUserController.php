@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\Plan;
 use App\Models\Restaurant;
+use App\Models\Statistic;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
@@ -57,6 +58,11 @@ class RegisteredUserController extends Controller
             // create resturant
             $resturantCreated =      Restaurant::create([
                 'name' => $request->nameResturant
+            ]);
+
+            // create resturant Statistic
+            $resturantStatistic =      Statistic::create([
+                'restaurant_id' => $resturantCreated->id
             ]);
 
             // assign plan free atomaticly for resturant
@@ -117,7 +123,7 @@ class RegisteredUserController extends Controller
 
 
         //1- fill data for admin
-     
+
 
         //2- validation inputs
         $request->validate([

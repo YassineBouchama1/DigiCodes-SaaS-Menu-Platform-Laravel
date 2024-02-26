@@ -1,7 +1,8 @@
 @extends('restaurant/layouts/resturant_layout')
 
 @section('content')
-    <!-- Your page-specific content goes here -->
-    <h1>Welcome to the resturant Dashboard</h1>
-    <p>This is the dashboard page for returant.</p>
+<h2>Menu items: <span>{{$resturantStatistic->count_menu_items}}/{{$limits->max_menu_items}}</span></h2>
+<h2>Media: <span>{{$resturantStatistic->count_media}}/{{$limits->max_media}}</span></h2>
+<h2>Qrcode Scans: <span>{{$resturantStatistic->count_scans}}/{{$limits->max_scans}}</span></h2>
+
 @endsection

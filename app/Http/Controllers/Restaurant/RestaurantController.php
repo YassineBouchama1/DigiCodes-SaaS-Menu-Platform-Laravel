@@ -3,20 +3,29 @@
 namespace App\Http\Controllers\Restaurant;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ProfileUpdateRequest;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
+
+use App\Models\Statistic;
+use App\Models\Subscription;
+
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
+
 
 class RestaurantController extends Controller
 {
     public function dashboard()
     {
         $user = Auth::user();
-        // $permissions =  $user->getAllPermissions();
-        // dd($permissions);
-        return view('restaurant.dashboard');
+
+        $limits = Subscription::where('restaurant_id', $user->restaurant_id)
+            ->where('status', 'active')
+            ->first()->plan;
+
+        $resturantStatistic = Statistic::where('restaurant_id', $user->restaurant_id)
+            ->first();
+
+        // dd($limits);
+        // dd($resturantStatistic);
+        return view('restaurant.dashboard', compact('limits', 'resturantStatistic'));
     }
 
     public function qrcode()
@@ -24,6 +33,14 @@ class RestaurantController extends Controller
         $user = Auth::user();
         // $permissions =  $user->getAllPermissions();
         // dd($permissions);
+
+
         return view('restaurant.dashboard');
+    }
+
+
+    public function statics()
+    {
+        return $limits = Subscription::where('restaurant_id', Auth::user()->restaurant_id)->plan;
     }
 }

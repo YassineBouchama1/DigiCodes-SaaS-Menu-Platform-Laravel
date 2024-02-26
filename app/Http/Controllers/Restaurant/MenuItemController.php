@@ -6,6 +6,8 @@ use App\Events\RestaurantLogsEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Menu;
 use App\Models\MenuItem;
+use App\Models\Statistic;
+use App\Models\Subscription;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -43,6 +45,20 @@ class MenuItemController extends Controller
     // Store a newly created menu in storage
     public function store(Request $request)
     {
+
+
+        //check if they reach a max of plan
+        $statistics = Statistic::firstOrNew(['restaurant_id' => Auth::user()->restaurant_id]);
+        $limits = Subscription::where('restaurant_id', Auth::user()->restaurant_id)
+            ->where('status', 'active')
+            ->first()->plan;
+
+        //if they reach max items menu or media  display error
+        if ($statistics->count_menu_items >= $limits->max_menu_items) {
+            return back()->with('error', 'Maximum menu items limit reached.');
+        } elseif ($statistics->count_media >= $limits->max_media) {
+            return back()->with('error', 'Maximum media limit reached.');
+        }
 
 
         // dd($request->image);
@@ -90,6 +106,15 @@ class MenuItemController extends Controller
         // send email to resturnat owner
         Event::dispatch(new RestaurantLogsEvent(Auth::user(), 'create Menu Item', $ownerRestaurant));
 
+        //incess count menuItems
+        $statistics->count_menu_items += 1;
+
+        $statistics->count_media += 1;
+        if ($video) {
+            $statistics->count_media += 1;
+        }
+
+        $statistics->save();
         return redirect()->route('menuitems.index')->with('success', 'Menu created successfully.');
     }
 
