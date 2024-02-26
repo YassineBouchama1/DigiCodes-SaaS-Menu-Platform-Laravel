@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Restaurant;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\CancelSubscriptionJob;
 use App\Models\Plan;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
@@ -61,7 +62,11 @@ class SubscriptionController extends Controller
             ]);
 
             // Create a new subscription
-            Subscription::create($requestData);
+            $subscription =     Subscription::create($requestData);
+
+            // create cron job for cancel subscribtion after 30 days
+            CancelSubscriptionJob::dispatch($subscription->id)
+                ->delay(now()->addDays((int)$selectedPlan->duration));
 
             // Redirect back with a success message
             return redirect()->route('subscriptions.index')->with('success', 'Subscription created successfully.');

@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\OperatorMail;
+use App\Mail\MailableCreateAccount;
 use App\Mail\MailableUpdateOperator;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -21,8 +22,14 @@ class SendOperatoMail
     /**
      * Handle the event.
      */
-    public function handle(OperatorMail $event): void
+    public function handle(OperatorMail $event)
     {
-        Mail::to($event->operator->email)->send(new MailableUpdateOperator($event->operator));
+        if ($event->whatHappend === 'create') {
+            // Send creation email
+            Mail::to($event->operator->email)->send(new MailableCreateAccount($event->operator, $event->password));
+        } else {
+            // Send update email
+            Mail::to($event->operator->email)->send(new MailableUpdateOperator($event->operator));
+        }
     }
 }

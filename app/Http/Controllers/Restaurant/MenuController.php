@@ -12,8 +12,9 @@ class MenuController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Menu $menu)
     {
+
         // Get the authenticated user's restaurant_id
         $restaurantId = Auth::user()->restaurant_id;
 
@@ -21,13 +22,10 @@ class MenuController extends Controller
         $menus = Menu::where('restaurant_id', $restaurantId)->get();
         // dd($menus);
         //3- send it to view
-        return view('restaurant.menus.index', compact('menus'));
+        return view('restaurant.menus.index', compact('menus', 'menu'));
     }
 
-    public function create()
-    {
-        return view('restaurant.menus.create');
-    }
+
 
 
 
@@ -43,10 +41,10 @@ class MenuController extends Controller
         $menu = new Menu();
         $menu->title = $request->title;
         $menu->description = $request->description;
-        $menu->user_id = Auth::id();
+        $menu->restaurant_id = Auth::user()->restaurant_id;
         $menu->save();
 
-        return redirect()->route('restaurant.menus.index')->with('success', 'Menu created successfully.');
+        return redirect()->route('menus.index')->with('success', 'Menu created successfully.');
     }
 
 
@@ -61,18 +59,9 @@ class MenuController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        return view('restaurant.menus.show', compact('menu'));
+        return view('restaurant.menus.index', compact('menu'));
     }
 
-    // Show the form for editing the specified menu
-    public function edit(Menu $menu)
-    {
-        if ($menu->restaurant_id !== Auth::user()->restaurant_id) {
-            abort(403, 'Unauthorized action.');
-        }
-
-        return view('menus.edit', compact('menu'));
-    }
 
 
 
@@ -107,6 +96,6 @@ class MenuController extends Controller
 
         $menu->delete();
 
-        return redirect()->route('restaurant.menus.index')->with('success', 'Menu deleted successfully.');
+        return redirect()->route('menus.index')->with('success', 'Menu deleted successfully.');
     }
 }

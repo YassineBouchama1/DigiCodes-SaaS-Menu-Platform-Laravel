@@ -52,9 +52,13 @@ class="rounded-sm border-md border-gray-200 forced-colors:text-blue-600"
 class="flex flex-col gap-y-1 mt-8">
 Categories
 <select name="menu_id">
+    <option disabled selected value="">Select Category</option>
 
-    <option value="1">Piza</option>
-    <option value="2">Piza2</option>
+    @forelse ($menus as $item)
+    <option value="{{$item['id']}}">{{$item['title']}}</option>
+    @empty
+    <option value="">Empty</option>
+    @endforelse
 </select>
 </label>
 

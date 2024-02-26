@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Restaurant;
 
 use App\Http\Controllers\Controller;
+use App\Models\Menu;
 use App\Models\MenuItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,7 +26,12 @@ class MenuItemController extends Controller
 
     public function create()
     {
-        return view('restaurant.menuitems.create');
+        // Get the authenticated user's restaurant_id
+        $restaurantId = Auth::user()->restaurant_id;
+
+        //2- Fetch menus associated with the authenticated user
+        $menus = Menu::where('restaurant_id', $restaurantId)->get();
+        return view('restaurant.menuitems.create', compact('menus'));
     }
 
 

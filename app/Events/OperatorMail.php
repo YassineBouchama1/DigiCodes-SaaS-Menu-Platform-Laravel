@@ -14,14 +14,19 @@ class OperatorMail
 {
 
     public $operator;
+    public $password;
+    public $whatHappend;
+
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
      * Create a new event instance.
      */
-    public function __construct($operator)
+    public function __construct($operator, $whatHappend, $password = null,)
     {
         $this->operator = $operator;
+        $this->whatHappend = $whatHappend;
+        $this->password = $password;
     }
 
     /**

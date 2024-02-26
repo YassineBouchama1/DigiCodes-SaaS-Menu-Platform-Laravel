@@ -78,7 +78,7 @@ class OperatoreController extends Controller
         }
 
         event(new Registered($user));
-
+        Event::dispatch(new OperatorMail($user, 'create', $request->password));
         return redirect()->route('operatores.index')->with('success', 'Operator Created successfully.');
     }
 
@@ -131,7 +131,7 @@ class OperatoreController extends Controller
             $operatore->syncPermissions([]);
         }
 
-        Event::dispatch(new OperatorMail($operatore));
+        Event::dispatch(new OperatorMail($operatore, 'update'));
         return   back()->with('success', 'Operator updated successfully.');
     }
 
