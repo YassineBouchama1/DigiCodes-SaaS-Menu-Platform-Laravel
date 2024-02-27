@@ -18,6 +18,11 @@ class AdminController extends Controller
 
         $Restaurant = Restaurant::get();
         $Users = User::get();
-        return view('admin.dashboard', compact('Restaurant', 'Users'));
+        $data = User::selectRaw("to_char(created_at, 'YYYY-MM-DD') as date, count(*) as aggregate")
+            ->where('created_at', '>=', now()->subDays(30)->startOfDay())
+            ->groupBy('date')
+            ->get();
+
+        return view('admin.dashboard', compact('Restaurant', 'Users', 'data'));
     }
 }

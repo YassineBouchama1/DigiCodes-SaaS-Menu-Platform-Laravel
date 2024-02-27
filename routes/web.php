@@ -11,12 +11,13 @@ use App\Http\Controllers\Restaurant\OperatoreController;
 use App\Http\Controllers\Restaurant\QrCodeGeneratorController;
 use App\Http\Controllers\Restaurant\RestaurantController;
 use App\Http\Controllers\Restaurant\SubscriptionController;
-
+use App\Http\Controllers\SocialiteController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
-
+use Laravel\Socialite\Facades\Socialite;
 
 //main redirect dashboard
 Route::get('/dashboard', function () {
@@ -104,6 +105,25 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+
+
+
+
+
+// Route::get("auth/google/redirect", function (Request $request) {
+//     return Socialite::driver('google')->redirect();
+// })->name('socialite.redirect');
+
+// Route::get("auth/google/callback", function (Request $request) {
+//     dd($request->all());
+// })->name('socialite.redirect');
+
+
+Route::get("redirect/{provider}", [SocialiteController::class, 'redirect'])->name('socialite.redirect');
+
+Route::get("callback/{provider}", [SocialiteController::class, 'callback'])->name('socialite.callback');
+
 
 Route::fallback(fn () => 'not found page');
 

@@ -60,6 +60,7 @@ class RegisteredUserController extends Controller
                 'name' => $request->nameResturant
             ]);
 
+
             // create resturant Statistic
             $resturantStatistic =      Statistic::create([
                 'restaurant_id' => $resturantCreated->id
@@ -76,6 +77,7 @@ class RegisteredUserController extends Controller
                     'status' => 'active',
                 ]);
             }
+
 
             //create account for  resturnat
             $user = User::create([
