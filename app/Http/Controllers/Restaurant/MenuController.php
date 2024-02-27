@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Cache;
 
 class MenuController extends Controller
 {
@@ -19,10 +20,15 @@ class MenuController extends Controller
     {
 
         // Get the authenticated user's restaurant_id
-        $restaurantId = Auth::user()->restaurant_id;
+        // $restaurantId = Auth::user()->restaurant_id;
 
         //2- Fetch menus associated with the authenticated user
-        $menus = Menu::where('restaurant_id', $restaurantId)->get();
+        // $menus = Menu::where('restaurant_id', $restaurantId)->get();
+
+        $menus = Cache::remember('categoriesMenu', 60, function () {
+            $restaurantId = Auth::user()->restaurant_id;
+            return     Menu::where('restaurant_id', $restaurantId)->get();
+        });
         // dd($menus);
         //3- send it to view
         return view('restaurant.menus.index', compact('menus', 'menu'));
@@ -56,6 +62,8 @@ class MenuController extends Controller
         // dd($ownerRestaurant);
         // send email to resturnat owner
         Event::dispatch(new RestaurantLogsEvent(Auth::user(), 'create Category', $ownerRestaurant));
+        Cache::forget('categoriesMenu');
+
 
         return redirect()->route('menus.index')->with('success', 'Menu created successfully.');
     }
