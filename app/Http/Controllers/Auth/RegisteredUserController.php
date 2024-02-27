@@ -55,10 +55,15 @@ class RegisteredUserController extends Controller
                 'nameResturant' => ['required', 'string', 'max:255'],
             ]);
 
+
+
+
+
             // create resturant
             $resturantCreated =      Restaurant::create([
                 'name' => $request->nameResturant
             ]);
+
 
 
             // create resturant Statistic

@@ -43,10 +43,27 @@ class SocialiteController extends Controller
                 return redirect()->route('restaurant.dashboard');
             } else {
 
+
+
+                // Check if the restaurant name already exists
+
+                $existingRestaurant = Restaurant::where('name', $request->nameResturant)->first();
+
+
+                if ($existingRestaurant) {
+                    return redirect()->route('login')->with('error', 'Restaurant name already exists');
+                }
+
+                
                 // create resturant
                 $resturantCreated =      Restaurant::create([
                     'name' => $user['name']
                 ]);
+
+
+
+
+
                 // create resturant Statistic
                 $resturantStatistic =      Statistic::create([
                     'restaurant_id' => $resturantCreated->id

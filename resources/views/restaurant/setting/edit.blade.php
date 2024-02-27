@@ -44,8 +44,8 @@ class="h-auto w-full p-4 flex flex-col md:flex-row justify-between gap-4">
 <label for="name"
 class="flex flex-col gap-y-1 mt-8">
 Name
- <input  type="text" id="name"  disabled value="{{$restaurant->name}}"
-class="rounded-sm border-md border-gray-200 opacity-45"
+ <input  type="text" id="name"  name="name" value="{{$restaurant->name}}"
+class="rounded-sm border-md border-gray-200 "
  placeholder="Enter address">
 </label>
 <label for="address"
