@@ -110,16 +110,7 @@ Route::middleware('auth')->group(function () {
 
 
 
-
-// Route::get("auth/google/redirect", function (Request $request) {
-//     return Socialite::driver('google')->redirect();
-// })->name('socialite.redirect');
-
-// Route::get("auth/google/callback", function (Request $request) {
-//     dd($request->all());
-// })->name('socialite.redirect');
-
-
+// this routes for  login with social media accounts
 Route::get("redirect/{provider}", [SocialiteController::class, 'redirect'])->name('socialite.redirect');
 
 Route::get("callback/{provider}", [SocialiteController::class, 'callback'])->name('socialite.callback');
