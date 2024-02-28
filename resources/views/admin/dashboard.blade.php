@@ -54,26 +54,62 @@
 
 
      </div>
-     <canvas id="myChart"></canvas>
+     <div class=" flex justify-center  w-4/6 ">
+         <canvas id="myChart" style="width: 100px" ></canvas>
+
+
+        </div>
+        <div class=" flex justify-center  w-4/6 ">
+
+        <canvas id="myChartLine" style="width: 100px" ></canvas>
+    </div>
 
     <script>
 const data = {
     labels: @json($data->map(fn ($data) => $data->date)),
     datasets: [{
         label: 'Registered users in the last 30 days',
-        backgroundColor: 'rgba(255, 99, 132, 0.3)',
+        backgroundColor: '#01BA01',
         borderColor: 'rgb(255, 99, 132)',
         data: @json($data->map(fn ($data) => $data->aggregate)),
     }]
 };
+
+
 const config = {
     type: 'bar',
     data: data
 };
+
 const myChart = new Chart(
     document.getElementById('myChart'),
     config
 );
+
+
+const dataLine = {
+    labels: @json($data->map(fn ($data) => $data->date)),
+    datasets: [{
+        label: 'Registered users in the last 30 days',
+        backgroundColor: [
+      'rgb(255, 99, 132)',
+      'rgb(54, 162, 235)',
+      'rgb(255, 205, 86)'
+    ],
+        // borderColor: 'rgb(255, 99, 132)',
+        data: @json($data->map(fn ($data) => $data->aggregate)),
+    }]
+};
+
+const configLine = {
+  type: 'pie',
+  data: dataLine,
+};
+const myChartLine = new Chart(
+    document.getElementById('myChartLine'),
+    configLine
+);
 </script>
+
 
    @endsection
