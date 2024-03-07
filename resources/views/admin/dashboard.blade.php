@@ -54,14 +54,16 @@
 
 
      </div>
-     <div class=" flex justify-center  w-4/6 ">
-         <canvas id="myChart" style="width: 100px" ></canvas>
+    <div class="flex ">
+      <div class=" flex justify-center  w-4/6 ">
+        <canvas id="myChart" style="width: 100px" ></canvas>
 
 
-        </div>
-        <div class=" flex justify-center  w-4/6 ">
+       </div>
+       <div class=" flex justify-center  w-2/6 ">
 
-        <canvas id="myChartLine" style="width: 100px" ></canvas>
+       <canvas id="myChartLine"  style="width: 100px" ></canvas>
+   </div>
     </div>
 
     <script>

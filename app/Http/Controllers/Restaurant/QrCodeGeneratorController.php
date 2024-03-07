@@ -62,10 +62,27 @@ class QrCodeGeneratorController extends Controller
             return 'blocked';
         }
 
-        //5- incress statistics <count scan qrcode>
         $statistics->count_scans += 1;
         $statistics->save();
+
         // dd($restaurant);
         return Redirect::route('menu.index', ['restaurantName' => $restaurantData->name]);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // //5- incress statistics <count scan qrcode>
+        // $statistics->count_scans += 1;
+        // $statistics->save();

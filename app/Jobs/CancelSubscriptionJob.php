@@ -26,6 +26,7 @@ class CancelSubscriptionJob implements ShouldQueue
     /**
      * Execute the job.
      */
+
     public function handle(): void
     {
         $subscription = Subscription::find($this->subscriptionId);
@@ -42,5 +43,4 @@ class CancelSubscriptionJob implements ShouldQueue
             }
         }
     }
-
 }

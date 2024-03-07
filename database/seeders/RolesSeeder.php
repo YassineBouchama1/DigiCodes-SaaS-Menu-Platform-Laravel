@@ -17,7 +17,16 @@ class RolesSeeder extends Seeder
     public function run(): void
     {
 
+
         //1- create permissions
+
+
+        // // Permissions for managing Categories
+
+        // Permission::create(['name' => 'create categories']);
+        // Permission::create(['name' => 'edit categories']);
+        // Permission::create(['name' => 'delete categories']);
+
 
         // // Permissions for managing menus
         // Permission::create(['name' => 'create menu']);
@@ -45,7 +54,7 @@ class RolesSeeder extends Seeder
 
 
         // creste role user
-        $adminRole = Role::create(['name' => 'user']);
+        // $adminRole = Role::create(['name' => 'user']);
         // $adminRole->syncPermissions(Permission::all());
 
         // Create restaurant owner role and assign relevant permissions
@@ -58,6 +67,21 @@ class RolesSeeder extends Seeder
         //     'manage restaurant information',
         //     'manage operators'
         // ]);
+
+        $addNewPermissions = Role::findByName('restaurant owner');
+
+        $addNewPermissions->syncPermissions([
+            'create categories',
+            'edit categories',
+            'delete categories',
+            'create menu',
+            'edit menu',
+            'delete menu',
+            'select subscription plan',
+            'manage restaurant information',
+            'manage operators'
+
+        ]);
 
         // Create operator role and assign permissions for managing menus
         // $operatorRole = Role::create(['name' => 'operator']);
